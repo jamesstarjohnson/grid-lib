@@ -1,0 +1,30 @@
+{
+  "name": "grid-lib",
+  "version": "0.1.0",
+  "private": false,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "lodash": "^4.17.11"
+  },
+  "scripts": {
+    "build": "rm -r ./lib && tsc"
+  },
+  "devDependencies": {
+    "@types/classnames": "^2.2.6",
+    "@types/lodash": "^4.14.118",
+    "@types/node": "^10.12.2",
+    "@types/react": "^16.4.18",
+    "prettier": "^1.14.3",
+    "typescript": "^3.1.6"
+  },
+  "peerDependencies": {
+    "@material-ui/core": "^3.3.2",
+    "@material-ui/icons": "^3.0.1",
+    "react": "^16.6.0"
+  }
+}
