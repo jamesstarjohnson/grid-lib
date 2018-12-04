@@ -1,5 +1,5 @@
 export { default } from './CustomTable';
-import { LabelKind } from '../Label';
+import { LabelKind } from './Label';
 
 export type Data = {
   name: string;

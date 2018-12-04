@@ -3,7 +3,7 @@ import * as React from 'react';
 import RegularCell from './RegularCell';
 import { CoreTableProps, Column } from '../CoreTable';
 import { Data } from './index';
-import Label from '../Label';
+import Label from './Label';
 import KeyCell from './KeyCell';
 import SearchField from '../SearchField';
 import SmartTable from '../SmartTable';
