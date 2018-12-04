@@ -7,7 +7,7 @@
 /coverage
 
 # production
-/lib/*
+/lib
 
 # misc
 .vscode
