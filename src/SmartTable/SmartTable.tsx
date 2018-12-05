@@ -13,7 +13,8 @@ export type Sort<T> = {
 type Props<T> = {
   data: T[];
   multiselect?: boolean;
-  tableActionsRenderer(): JSX.Element;
+  tableActionsRenderer?(): JSX.Element;
+  filtersRenderer?(): JSX.Element;
   onChange(
     sort: Sort<T> | undefined,
     selectedRows: Record<number, boolean>,
@@ -74,31 +75,32 @@ class SmartTable<T> extends React.Component<Props<T>> {
     }, {}) as Record<keyof T, boolean>;
   });
 
-  getColumnIds = memoize(
-    (columns: Array<Column<T>>) => columns.map(c => c.name) as Array<keyof T>,
-  );
-
   render() {
     return (
-      <React.Fragment>
-        <TableActions>
-          {this.props.tableActionsRenderer()}
-          <ColumnSelector
-            columnIds={this.getColumnIds(this.props.columns)}
-            columnsChecked={this.getColumnsChecked(this.props.columns)}
-            onChange={this.handleColumnChange}
+      <div style={{ display: 'flex' }}>
+        <div>
+          <TableActions>
+            {this.props.tableActionsRenderer &&
+              this.props.tableActionsRenderer()}
+            <ColumnSelector
+              columnsChecked={this.getColumnsChecked(this.props.columns)}
+              onChange={this.handleColumnChange}
+            />
+          </TableActions>
+          <CoreTable
+            sort={this.props.sort}
+            onSelect={this.handleSelect}
+            selectedRows={this.props.selectedRows}
+            onSort={this.handleSort}
+            data={this.props.data}
+            columns={this.getColumns(this.props.columns)}
+            rowActionsRenderer={this.props.rowActionsRenderer}
           />
-        </TableActions>
-        <CoreTable
-          sort={this.props.sort}
-          onSelect={this.handleSelect}
-          selectedRows={this.props.selectedRows}
-          onSort={this.handleSort}
-          data={this.props.data}
-          columns={this.getColumns(this.props.columns)}
-          actionsRenderer={this.props.actionsRenderer}
-        />
-      </React.Fragment>
+        </div>
+        <div style={{ paddingTop: 60, paddingLeft: 15 }}>
+          {this.props.filtersRenderer && this.props.filtersRenderer()}
+        </div>
+      </div>
     );
   }
 }

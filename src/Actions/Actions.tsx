@@ -20,12 +20,12 @@ const IconStyled = styled(IconButton)(theme => ({
 
 class Actions<T> extends React.Component<Props<T>> {
   handleEdit = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.preventDefault();
     event.stopPropagation();
     this.props.onEdit!(this.props.data);
   };
 
-  handleDelete = () => {
+  handleDelete = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
     this.props.onDelete!(this.props.data);
   };
 
@@ -34,14 +34,13 @@ class Actions<T> extends React.Component<Props<T>> {
     return (
       <Grid container={true} alignItems="center" style={{ width: '100px' }}>
         <Grid item={true} xs={4}>
-          {onEdit &&
-            selected && (
-              <div onClick={this.handleEdit}>
-                <IconStyled>
-                  <EditIcon />
-                </IconStyled>
-              </div>
-            )}
+          {onEdit && selected && (
+            <div onClick={this.handleEdit}>
+              <IconStyled>
+                <EditIcon />
+              </IconStyled>
+            </div>
+          )}
         </Grid>
         <Grid item={true} xs={4}>
           {onDelete && (

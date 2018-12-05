@@ -5,10 +5,9 @@ const styles = (theme: Theme) =>
   createStyles({
     container: {
       display: 'flex',
-      alignItems: 'flex-end',
+      alignItems: 'center',
       justifyContent: 'space-between',
-      paddingTop: 10,
-      paddingBottom: 10,
+      height: 60,
     },
   });
 

@@ -1,5 +1,5 @@
 {
-  "name": "gl12345",
+  "name": "grid-lib",
   "version": "0.1.0",
   "private": false,
   "main": "lib/index.js",

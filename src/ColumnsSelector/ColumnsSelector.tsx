@@ -12,9 +12,8 @@ type State = {
 };
 
 type Props<T> = {
-  onChange(columnsChecked: Record<keyof T, boolean>): void;
+  onChange(checkedMap: Record<keyof T, boolean>): void;
   columnsChecked: Record<keyof T, boolean>;
-  columnIds: Array<keyof T>;
 };
 
 class ColumnsSelector<T> extends React.Component<Props<T>, State> {
@@ -39,7 +38,7 @@ class ColumnsSelector<T> extends React.Component<Props<T>, State> {
 
   render() {
     const { anchorEl } = this.state;
-    const { columnsChecked, columnIds } = this.props;
+    const { columnsChecked } = this.props;
     return (
       <React.Fragment>
         <TableAction>
@@ -59,15 +58,15 @@ class ColumnsSelector<T> extends React.Component<Props<T>, State> {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          {columnIds.map(column => (
+          {Object.keys(columnsChecked).map(column => (
             <MenuItem key={column as string}>
               <FormControlLabel
                 control={
                   <Checkbox
                     color="default"
                     checked={columnsChecked[column]}
-                    onChange={this.handleChange(column)}
-                    value={column as string}
+                    onChange={this.handleChange(column as keyof T)}
+                    value={column}
                   />
                 }
                 label={column}

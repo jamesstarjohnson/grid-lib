@@ -30,7 +30,7 @@ export type CoreTableProps<T> = {
   onSort?(name: keyof T): void;
   columns: Array<Column<T>>;
   data: Array<Data<T>>;
-  actionsRenderer?(value: Data<T>, selected?: boolean): JSX.Element;
+  rowActionsRenderer?(value: Data<T>, selected?: boolean): JSX.Element;
   sort?: Sort<T>;
   selectedRows: Record<number, boolean>;
   onSelect(index: number): void;
@@ -39,12 +39,12 @@ export type CoreTableProps<T> = {
 
 class CoreTable<T> extends React.Component<CoreTableProps<T>> {
   get columns(): Array<Column<T>> {
-    return this.props.actionsRenderer
+    return this.props.rowActionsRenderer
       ? [
           ...this.props.columns,
           {
             name: '',
-            render: this.props.actionsRenderer,
+            render: this.props.rowActionsRenderer,
             sortable: false,
           },
         ]
