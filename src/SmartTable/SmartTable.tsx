@@ -78,7 +78,7 @@ class SmartTable<T> extends React.Component<Props<T>> {
   render() {
     return (
       <div style={{ display: 'flex' }}>
-        <div>
+        <div style={{ width: this.props.filtersRenderer ? '80%' : '100%' }}>
           <TableActions>
             {this.props.tableActionsRenderer &&
               this.props.tableActionsRenderer()}
@@ -97,9 +97,17 @@ class SmartTable<T> extends React.Component<Props<T>> {
             rowActionsRenderer={this.props.rowActionsRenderer}
           />
         </div>
-        <div style={{ paddingTop: 60, paddingLeft: 15 }}>
-          {this.props.filtersRenderer && this.props.filtersRenderer()}
-        </div>
+        {this.props.filtersRenderer && (
+          <div
+            style={{
+              paddingTop: 60,
+              paddingLeft: 15,
+              width: 250,
+            }}
+          >
+            {this.props.filtersRenderer()}
+          </div>
+        )}
       </div>
     );
   }

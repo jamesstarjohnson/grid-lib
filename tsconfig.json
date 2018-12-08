@@ -20,13 +20,5 @@
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true
   },
-  "exclude": [
-    "node_modules",
-    "lib",
-    "coverage",
-    "scripts",
-    "acceptance-tests",
-    "jest",
-    "src/setupTests.ts"
-  ]
+  "exclude": ["node_modules", "lib"]
 }
