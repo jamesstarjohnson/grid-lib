@@ -11,3 +11,4 @@ export {
 export { default as TableAction } from './TableAction';
 export { default as styled } from './styled';
 export { default as Actions } from './Actions';
+export { default as CheckBoxFilter } from './CheckBoxFilter';
