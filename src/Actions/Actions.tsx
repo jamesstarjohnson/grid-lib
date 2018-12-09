@@ -32,25 +32,25 @@ class Actions<T> extends React.Component<Props<T>> {
   render() {
     const { onDelete, onEdit, selected } = this.props;
     return (
-      <Grid container={true} alignItems="center" style={{ width: '100px' }}>
-        <Grid item={true} xs={4}>
-          {onEdit && selected && (
-            <div onClick={this.handleEdit}>
-              <IconStyled>
-                <EditIcon />
-              </IconStyled>
-            </div>
-          )}
-        </Grid>
-        <Grid item={true} xs={4}>
-          {onDelete && (
-            <div onClick={this.handleDelete}>
-              <IconStyled>
-                <DeleteIcon />
-              </IconStyled>
-            </div>
-          )}
-        </Grid>
+      <Grid
+        container={true}
+        alignItems="center"
+        style={{ width: '100px', height: '35px', justifyContent: 'flex-end' }}
+      >
+        {onEdit && selected && (
+          <Grid item={true} xs={4}>
+            <IconStyled onClick={this.handleEdit}>
+              <EditIcon />
+            </IconStyled>
+          </Grid>
+        )}
+        {onDelete && (
+          <Grid item={true} xs={4}>
+            <IconStyled onClick={this.handleDelete}>
+              <DeleteIcon />
+            </IconStyled>
+          </Grid>
+        )}
       </Grid>
     );
   }

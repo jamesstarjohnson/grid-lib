@@ -1,12 +1,11 @@
 import * as React from 'react';
 import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import TableRow, { TableRowProps } from '@material-ui/core/TableRow';
 
 import StyledTable from './StyledTable';
 import StyledTableCell from './StyledTableCell';
 import HeaderCell from './HeaderCell';
-import CoreTableRow, { CoreTableRowProps } from './CoreTableRow';
 
 export type Column<T> = {
   header?: string;
@@ -17,10 +16,6 @@ export type Column<T> = {
   renderHeaderCell?: (col: Column<T>) => JSX.Element;
 };
 
-type Data<T> = T & {
-  helperText?: Partial<Record<keyof T, string>>;
-};
-
 export type Sort<T> = {
   value: 'ASC' | 'DESC';
   name: keyof T;
@@ -29,12 +24,12 @@ export type Sort<T> = {
 export type CoreTableProps<T> = {
   onSort?(name: keyof T): void;
   columns: Array<Column<T>>;
-  data: Array<Data<T>>;
-  rowActionsRenderer?(value: Data<T>, selected?: boolean): JSX.Element;
+  data: Array<T>;
+  rowActionsRenderer?(value: T, selected?: boolean): JSX.Element;
   sort?: Sort<T>;
   selectedRows: Record<number, boolean>;
   onSelect(index: number): void;
-  component?: React.ComponentType<CoreTableRowProps>;
+  rowComponent?: React.ComponentType<TableRowProps>;
 };
 
 class CoreTable<T> extends React.Component<CoreTableProps<T>> {
@@ -74,8 +69,13 @@ class CoreTable<T> extends React.Component<CoreTableProps<T>> {
     />
   );
 
+  handleSelect = (i: number) => () => {
+    this.props.onSelect(i);
+  };
+
   render() {
-    const { data } = this.props;
+    const { data, rowComponent } = this.props;
+    const ComponentTableRow = rowComponent || TableRow;
     return (
       <StyledTable>
         <TableHead>
@@ -91,19 +91,18 @@ class CoreTable<T> extends React.Component<CoreTableProps<T>> {
         </TableHead>
         <TableBody>
           {data.map((row, i) => (
-            <CoreTableRow
+            <ComponentTableRow
               hover={true}
               key={i}
-              index={i}
               selected={this.props.selectedRows[i]}
-              onSelect={this.props.onSelect}
+              onClick={this.handleSelect(i)}
             >
               {this.columns.map((col, colIndex) => (
                 <StyledTableCell key={colIndex}>
                   {col.render(row, this.props.selectedRows[i])}
                 </StyledTableCell>
               ))}
-            </CoreTableRow>
+            </ComponentTableRow>
           ))}
         </TableBody>
       </StyledTable>

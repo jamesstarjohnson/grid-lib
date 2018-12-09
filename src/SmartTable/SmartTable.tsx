@@ -95,6 +95,7 @@ class SmartTable<T> extends React.Component<Props<T>> {
             data={this.props.data}
             columns={this.getColumns(this.props.columns)}
             rowActionsRenderer={this.props.rowActionsRenderer}
+            rowComponent={this.props.rowComponent}
           />
         </div>
         {this.props.filtersRenderer && (
