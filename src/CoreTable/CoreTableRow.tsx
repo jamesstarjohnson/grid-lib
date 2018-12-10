@@ -1,19 +1,15 @@
 import * as React from 'react';
 import TableRow, { TableRowProps } from '@material-ui/core/TableRow';
-import { createStyles, Theme, withStyles } from '@material-ui/core';
+import { createStyles, withStyles } from '@material-ui/core';
 
-const styles = (theme: Theme) =>
+const styles = () =>
   createStyles({
     root: {
       height: 70,
       '&$selected': {
-        backgroundColor: '#e5f2fe',
-      },
-      '&$hover:hover': {
-        backgroundColor: theme.palette.grey[100],
+        backgroundColor: '#e5f2fe !important',
       },
     },
-    hover: {},
     selected: {},
   });
 

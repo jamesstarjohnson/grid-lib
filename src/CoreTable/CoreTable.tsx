@@ -2,10 +2,11 @@ import * as React from 'react';
 import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow, { TableRowProps } from '@material-ui/core/TableRow';
+import CoreTableRow from './CoreTableRow';
+import HeaderCell from './HeaderCell';
 
 import StyledTable from './StyledTable';
 import CoreTableCell from './CoreTableCell';
-import HeaderCell from './HeaderCell';
 
 export type Column<T> = {
   header?: string;
@@ -25,6 +26,10 @@ export type Sort<T> = {
   name: keyof T;
 };
 
+type State = {
+  hovered: number | undefined;
+};
+
 export type CoreTableProps<T> = {
   onSort?(name: keyof T): void;
   columns: Array<Column<T>>;
@@ -36,7 +41,11 @@ export type CoreTableProps<T> = {
   rowComponent?: React.ComponentType<TableRowProps>;
 };
 
-class CoreTable<T> extends React.Component<CoreTableProps<T>> {
+class CoreTable<T> extends React.Component<CoreTableProps<T>, State> {
+  state = {
+    hovered: undefined,
+  };
+
   get columns(): Array<ActionColumn<T>> {
     return this.props.rowActionsRenderer
       ? [
@@ -74,13 +83,21 @@ class CoreTable<T> extends React.Component<CoreTableProps<T>> {
     />
   );
 
+  handleMouseEnter = (index: number) => () => {
+    this.setState({ hovered: index });
+  };
+
+  handleMouseLeave = () => {
+    this.setState({ hovered: undefined });
+  };
+
   handleSelect = (i: number) => () => {
     this.props.onSelect(i);
   };
 
   render() {
     const { data, rowComponent } = this.props;
-    const ComponentTableRow = rowComponent || TableRow;
+    const ComponentTableRow = rowComponent || CoreTableRow;
     return (
       <StyledTable>
         <TableHead>
@@ -97,14 +114,16 @@ class CoreTable<T> extends React.Component<CoreTableProps<T>> {
         <TableBody>
           {data.map((row, i) => (
             <ComponentTableRow
+              onMouseEnter={this.handleMouseEnter(i)}
+              onMouseLeave={this.handleMouseLeave}
               hover={true}
               key={i}
-              selected={this.props.selectedRows[i]}
+              selected={this.state.hovered === i}
               onClick={this.handleSelect(i)}
             >
               {this.columns.map((col, colIndex) => (
                 <CoreTableCell key={colIndex} action={col.action}>
-                  {col.render(row, this.props.selectedRows[i])}
+                  {col.render(row, this.state.hovered === i)}
                 </CoreTableCell>
               ))}
             </ComponentTableRow>
