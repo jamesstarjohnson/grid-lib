@@ -35,7 +35,12 @@ class Actions<T> extends React.Component<Props<T>> {
       <Grid
         container={true}
         alignItems="center"
-        style={{ width: '100px', height: '35px', justifyContent: 'flex-end' }}
+        style={{
+          display: 'inline-flex',
+          width: '100px',
+          height: '35px',
+          justifyContent: 'flex-end',
+        }}
       >
         {onEdit && selected && (
           <Grid item={true} xs={4}>

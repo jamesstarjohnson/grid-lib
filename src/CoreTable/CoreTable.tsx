@@ -4,7 +4,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow, { TableRowProps } from '@material-ui/core/TableRow';
 
 import StyledTable from './StyledTable';
-import StyledTableCell from './StyledTableCell';
+import CoreTableCell from './CoreTableCell';
 import HeaderCell from './HeaderCell';
 
 export type Column<T> = {
@@ -15,6 +15,10 @@ export type Column<T> = {
   display?: boolean;
   renderHeaderCell?: (col: Column<T>) => JSX.Element;
 };
+
+type ActionColumn<T> = {
+  action?: true;
+} & Column<T>;
 
 export type Sort<T> = {
   value: 'ASC' | 'DESC';
@@ -33,11 +37,12 @@ export type CoreTableProps<T> = {
 };
 
 class CoreTable<T> extends React.Component<CoreTableProps<T>> {
-  get columns(): Array<Column<T>> {
+  get columns(): Array<ActionColumn<T>> {
     return this.props.rowActionsRenderer
       ? [
           ...this.props.columns,
           {
+            action: true,
             name: '',
             render: this.props.rowActionsRenderer,
             sortable: false,
@@ -81,11 +86,11 @@ class CoreTable<T> extends React.Component<CoreTableProps<T>> {
         <TableHead>
           <TableRow>
             {this.columns.map((col, i) => (
-              <StyledTableCell key={i}>
+              <CoreTableCell key={i}>
                 {col.renderHeaderCell
                   ? col.renderHeaderCell(col)
                   : this.renderDefaultHeaderCell(col)}
-              </StyledTableCell>
+              </CoreTableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -98,9 +103,9 @@ class CoreTable<T> extends React.Component<CoreTableProps<T>> {
               onClick={this.handleSelect(i)}
             >
               {this.columns.map((col, colIndex) => (
-                <StyledTableCell key={colIndex}>
+                <CoreTableCell key={colIndex} action={col.action}>
                   {col.render(row, this.props.selectedRows[i])}
-                </StyledTableCell>
+                </CoreTableCell>
               ))}
             </ComponentTableRow>
           ))}
