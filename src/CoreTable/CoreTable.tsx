@@ -9,17 +9,13 @@ import StyledTable from './StyledTable';
 import CoreTableCell from './CoreTableCell';
 
 export type Column<T> = {
-  header?: string;
+  header: string;
   sortable: boolean;
   name: string;
   render: (data: T, selected?: boolean) => JSX.Element;
   display?: boolean;
   renderHeaderCell?: (col: Column<T>) => JSX.Element;
 };
-
-type ActionColumn<T> = {
-  action?: true;
-} & Column<T>;
 
 export type Sort<T> = {
   value: 'ASC' | 'DESC';
@@ -46,11 +42,12 @@ class CoreTable<T> extends React.Component<CoreTableProps<T>, State> {
     hovered: undefined,
   };
 
-  get columns(): Array<ActionColumn<T>> {
+  get columns(): Array<Column<T> | Column<T> & { action: boolean }> {
     return this.props.rowActionsRenderer
       ? [
           ...this.props.columns,
           {
+            header: '',
             action: true,
             name: '',
             render: this.props.rowActionsRenderer,
@@ -122,7 +119,10 @@ class CoreTable<T> extends React.Component<CoreTableProps<T>, State> {
               onClick={this.handleSelect(i)}
             >
               {this.columns.map((col, colIndex) => (
-                <CoreTableCell key={colIndex} action={col.action}>
+                <CoreTableCell
+                  key={colIndex}
+                  action={'action' in col ? col.action : false}
+                >
                   {col.render(row, this.state.hovered === i)}
                 </CoreTableCell>
               ))}

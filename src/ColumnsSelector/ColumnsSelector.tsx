@@ -59,7 +59,7 @@ class ColumnsSelector<T> extends React.Component<Props<T>, State> {
           onClose={this.handleClose}
         >
           {Object.keys(columnsChecked).map(column => (
-            <MenuItem key={column as string}>
+            <MenuItem key={column}>
               <FormControlLabel
                 control={
                   <Checkbox

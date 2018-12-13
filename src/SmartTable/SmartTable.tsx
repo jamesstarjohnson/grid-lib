@@ -46,7 +46,7 @@ class SmartTable<T> extends React.Component<Props<T>> {
     const { sort, selectedRows } = this.props;
     const columns = this.props.columns.map(c => ({
       ...c,
-      display: columnsChecked[c.name],
+      display: columnsChecked[c.header],
     }));
     this.props.onChange(sort, selectedRows, columns);
   };
@@ -70,7 +70,7 @@ class SmartTable<T> extends React.Component<Props<T>> {
 
   getColumnsChecked = memoize((columns: Array<Column<T>>) => {
     return columns.reduce((acc, next) => {
-      acc[next.name] = !!next.display;
+      acc[next.header] = !!next.display;
       return acc;
     }, {}) as Record<keyof T, boolean>;
   });
