@@ -5,7 +5,6 @@ import styled from '../styled';
 const StyledTable = styled(Table)(
   (theme: Theme) => ({
     backgroundColor: 'white',
-    minWidth: 700,
     border: `1px solid ${theme.palette.grey['300']}`,
   }),
   { name: 'StyledTable' },

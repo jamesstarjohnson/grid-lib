@@ -15,11 +15,9 @@ type Props<T> = {
   multiselect?: boolean;
   tableActionsRenderer?(): JSX.Element;
   filtersRenderer?(): JSX.Element;
-  onChange(
-    sort: Sort<T> | undefined,
-    selectedRows: Record<number, boolean>,
-    columns: Array<Column<T>>,
-  ): void;
+  onSort(sort: Sort<T>): void;
+  onRowSelect(selectedRows: Record<number, boolean>): void;
+  onColumnChange(columns: Column<T>[]): void;
 } & Pick<
   CoreTableProps<T>,
   Exclude<keyof CoreTableProps<T>, 'onSort' | 'onSelect'>
@@ -27,7 +25,6 @@ type Props<T> = {
 
 class SmartTable<T> extends React.Component<Props<T>> {
   handleSort = (name: keyof T) => {
-    const { selectedRows, columns } = this.props;
     let sortValue!: Sort<T>;
     const { sort } = this.props;
     if (!sort) {
@@ -39,16 +36,15 @@ class SmartTable<T> extends React.Component<Props<T>> {
     } else if (sort.name !== name) {
       sortValue = { name, value: 'ASC' };
     }
-    this.props.onChange(sortValue, selectedRows, columns);
+    this.props.onSort(sortValue);
   };
 
   handleColumnChange = (columnsChecked: Record<keyof T, boolean>) => {
-    const { sort, selectedRows } = this.props;
     const columns = this.props.columns.map(c => ({
       ...c,
       display: columnsChecked[c.header],
     }));
-    this.props.onChange(sort, selectedRows, columns);
+    this.props.onColumnChange(columns);
   };
 
   getColumns = memoize((columns: Array<Column<T>>) =>
@@ -56,7 +52,7 @@ class SmartTable<T> extends React.Component<Props<T>> {
   );
 
   handleSelect = (index: number) => {
-    const { multiselect, sort, columns } = this.props;
+    const { multiselect } = this.props;
     const selectedRows = multiselect
       ? {
           ...this.props.selectedRows,
@@ -65,7 +61,7 @@ class SmartTable<T> extends React.Component<Props<T>> {
       : {
           [index]: !this.props.selectedRows[index],
         };
-    this.props.onChange(sort, selectedRows, columns);
+    this.props.onRowSelect(selectedRows);
   };
 
   getColumnsChecked = memoize((columns: Array<Column<T>>) => {
@@ -75,10 +71,13 @@ class SmartTable<T> extends React.Component<Props<T>> {
     }, {}) as Record<keyof T, boolean>;
   });
 
+  getTableActionsContainerStyle = () =>
+    this.props.filtersRenderer ? { minWidth: '80%' } : { width: '100%' };
+
   render() {
     return (
       <div style={{ display: 'flex' }}>
-        <div style={{ width: this.props.filtersRenderer ? '80%' : '100%' }}>
+        <div style={this.getTableActionsContainerStyle()}>
           <TableActions>
             {this.props.tableActionsRenderer &&
               this.props.tableActionsRenderer()}
@@ -87,23 +86,26 @@ class SmartTable<T> extends React.Component<Props<T>> {
               onChange={this.handleColumnChange}
             />
           </TableActions>
-          <CoreTable
-            sort={this.props.sort}
-            onSelect={this.handleSelect}
-            selectedRows={this.props.selectedRows}
-            onSort={this.handleSort}
-            data={this.props.data}
-            columns={this.getColumns(this.props.columns)}
-            rowActionsRenderer={this.props.rowActionsRenderer}
-            rowComponent={this.props.rowComponent}
-          />
+          <div style={{ overflowX: 'auto' }}>
+            <CoreTable
+              sort={this.props.sort}
+              onSelect={this.handleSelect}
+              selectedRows={this.props.selectedRows}
+              onSort={this.handleSort}
+              data={this.props.data}
+              columns={this.getColumns(this.props.columns)}
+              rowActionsRenderer={this.props.rowActionsRenderer}
+              rowComponent={this.props.rowComponent}
+            />
+          </div>
         </div>
         {this.props.filtersRenderer && (
           <div
             style={{
               paddingTop: 60,
+              paddingRight: 15,
               paddingLeft: 15,
-              width: 250,
+              width: '100%',
             }}
           >
             {this.props.filtersRenderer()}
