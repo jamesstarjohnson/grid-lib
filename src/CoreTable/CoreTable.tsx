@@ -28,8 +28,8 @@ type State = {
 
 export type CoreTableProps<T> = {
   onSort?(name: keyof T): void;
-  columns: Array<Column<T>>;
-  data: Array<T>;
+  columns: Column<T>[];
+  data: T[] | undefined;
   rowActionsRenderer?(value: T, selected?: boolean): JSX.Element;
   sort?: Sort<T>;
   selectedRows: Record<number, boolean>;
@@ -109,25 +109,26 @@ class CoreTable<T> extends React.Component<CoreTableProps<T>, State> {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row, i) => (
-            <ComponentTableRow
-              onMouseEnter={this.handleMouseEnter(i)}
-              onMouseLeave={this.handleMouseLeave}
-              hover={true}
-              key={i}
-              selected={this.state.hovered === i}
-              onClick={this.handleSelect(i)}
-            >
-              {this.columns.map((col, colIndex) => (
-                <CoreTableCell
-                  key={colIndex}
-                  action={'action' in col ? col.action : false}
-                >
-                  {col.render(row, this.state.hovered === i)}
-                </CoreTableCell>
-              ))}
-            </ComponentTableRow>
-          ))}
+          {data &&
+            data.map((row, i) => (
+              <ComponentTableRow
+                onMouseEnter={this.handleMouseEnter(i)}
+                onMouseLeave={this.handleMouseLeave}
+                hover={true}
+                key={i}
+                selected={this.state.hovered === i}
+                onClick={this.handleSelect(i)}
+              >
+                {this.columns.map((col, colIndex) => (
+                  <CoreTableCell
+                    key={colIndex}
+                    action={'action' in col ? col.action : false}
+                  >
+                    {col.render(row, this.state.hovered === i)}
+                  </CoreTableCell>
+                ))}
+              </ComponentTableRow>
+            ))}
         </TableBody>
       </StyledTable>
     );

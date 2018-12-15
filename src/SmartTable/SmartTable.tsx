@@ -11,7 +11,6 @@ export type Sort<T> = {
 };
 
 type Props<T> = {
-  data: T[];
   multiselect?: boolean;
   tableActionsRenderer?(): JSX.Element;
   filtersRenderer?(): JSX.Element;
