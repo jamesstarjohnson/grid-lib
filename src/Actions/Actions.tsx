@@ -37,9 +37,9 @@ class Actions<T> extends React.Component<Props<T>> {
         alignItems="center"
         style={{
           display: 'inline-flex',
-          width: '100px',
+          width: '30px',
           height: '35px',
-          justifyContent: 'flex-end',
+          justifyContent: 'flex-start',
         }}
       >
         {onEdit && selected && (
