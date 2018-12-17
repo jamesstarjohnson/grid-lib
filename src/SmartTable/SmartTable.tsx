@@ -24,18 +24,18 @@ type Props<T> = {
 
 class SmartTable<T> extends React.Component<Props<T>> {
   handleSort = (name: keyof T) => {
-    let sortValue!: Sort<T>;
+    let sortValue: 'ASC' | 'DESC' = 'ASC';
+
     const { sort } = this.props;
+
     if (!sort) {
-      sortValue = { name, value: 'ASC' };
+      sortValue = 'ASC';
     } else if (sort.name === name && sort.value === 'ASC') {
-      sortValue = { name, value: 'DESC' };
+      sortValue = 'DESC';
     } else if (sort.name === name && sort.value === 'DESC') {
-      sortValue = { name, value: 'ASC' };
-    } else if (sort.name !== name) {
-      sortValue = { name, value: 'ASC' };
+      sortValue = 'ASC';
     }
-    this.props.onSort(sortValue);
+    this.props.onSort({ name, value: sortValue });
   };
 
   handleColumnChange = (columnsChecked: Record<keyof T, boolean>) => {
@@ -52,14 +52,18 @@ class SmartTable<T> extends React.Component<Props<T>> {
 
   handleSelect = (index: number) => {
     const { multiselect } = this.props;
+
+    const seletedRow = {
+      [index]: !this.props.selectedRows[index],
+    };
+
     const selectedRows = multiselect
       ? {
           ...this.props.selectedRows,
-          [index]: !this.props.selectedRows[index],
+          ...seletedRow,
         }
-      : {
-          [index]: !this.props.selectedRows[index],
-        };
+      : seletedRow;
+
     this.props.onRowSelect(selectedRows);
   };
 
@@ -85,7 +89,7 @@ class SmartTable<T> extends React.Component<Props<T>> {
               onChange={this.handleColumnChange}
             />
           </TableActions>
-          <div style={{ overflowX: 'auto' }}>
+          <div style={{ overflowX: 'auto', height: 'calc(100vh - 160px)' }}>
             <CoreTable
               sort={this.props.sort}
               onSelect={this.handleSelect}
