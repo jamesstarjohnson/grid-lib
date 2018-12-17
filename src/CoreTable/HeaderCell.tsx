@@ -43,10 +43,12 @@ const HeaderCell: React.SFC<Props & WithStyles<typeof styles>> = props => (
     <Typography className={props.classes.text} component="p">
       {props.header ? props.header : props.name}
     </Typography>
-    {props.sort &&
-      props.sort === 'ASC' && <ArrowDownward className={props.classes.arrow} />}
-    {props.sort &&
-      props.sort === 'DESC' && <ArrowUpward className={props.classes.arrow} />}
+    {props.sort && props.sort === 'ASC' && (
+      <ArrowUpward className={props.classes.arrow} />
+    )}
+    {props.sort && props.sort === 'DESC' && (
+      <ArrowDownward className={props.classes.arrow} />
+    )}
   </div>
 );
 
