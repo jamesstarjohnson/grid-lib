@@ -20,7 +20,7 @@ const styles = (theme: Theme) =>
       fontWeight: 'bold',
     },
     arrow: {
-      transform: 'scale(0.8)',
+      transform: 'scale(0.7)',
       fill: 'black',
     },
   });
