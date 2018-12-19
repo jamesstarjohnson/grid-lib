@@ -61,7 +61,7 @@ class CheckBoxFilter<
                 }
                 label={key}
               />
-              {count}
+              <span style={{ fontSize: 14 }}>{count}</span>
             </div>
           ))}
         </FormGroup>
